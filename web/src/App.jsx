@@ -4,6 +4,7 @@ import { api } from './services/api';
 import { GlobalStyles } from './styles/GlobalStyles';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
+import Kanban from './components/Kanban';
 import ContractorModal from './components/ContractorModal';
 import TaskModal from './components/TaskModal';
 import { ContractorCard } from './components/ContractorCard';
@@ -78,6 +79,19 @@ export function App() {
     }
   };
 
+  const handleUpdateTaskStatus = async (taskId, newStatus) => {
+    try {
+      if (newStatus === 'COMPLETED') {
+        await api.patch(`/tasks/${taskId}/complete`);
+      } else {
+        await api.patch(`/tasks/${taskId}`, { status: newStatus });
+      }
+      fetchData();
+    } catch (error) {
+      console.error('Erro ao atualizar status da tarefa:', error);
+    }
+  };
+
   return (
     <>
       <GlobalStyles />
@@ -86,6 +100,14 @@ export function App() {
       <S.Container>
         {activeTab === 'dashboard' && (
           <Dashboard contractors={contractors} tasks={tasks} />
+        )}
+
+        {activeTab === 'kanban' && (
+          <Kanban
+            tasks={tasks}
+            contractors={contractors}
+            onUpdateTaskStatus={handleUpdateTaskStatus}
+          />
         )}
 
         {activeTab === 'contractors' && (

@@ -1,10 +1,10 @@
-import React from 'react';
-import { LayoutDashboard, Users, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, Users, ShieldCheck, Kanban as KanbanIcon } from 'lucide-react';
 import * as S from './styles';
 
 export function Navbar({ activeTab, onChangeTab }) {
   const tabs = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'kanban', label: 'Kanban', icon: KanbanIcon },
     { id: 'contractors', label: 'Terceirizados', icon: Users },
   ];
 
