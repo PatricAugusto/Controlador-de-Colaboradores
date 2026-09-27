@@ -7,5 +7,6 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/setupTests.js',
+    fileParallelism: false, // Desativa execução paralela violenta no Windows/OneDrive
   },
 });
