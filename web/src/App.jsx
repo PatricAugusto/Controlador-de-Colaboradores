@@ -2,12 +2,15 @@ import { useEffect, useState, useCallback } from 'react';
 import { UserCheck, Plus } from 'lucide-react';
 import { api } from './services/api';
 import { GlobalStyles } from './styles/GlobalStyles';
+import Navbar from './components/Navbar';
+import Dashboard from './components/Dashboard';
 import ContractorModal from './components/ContractorModal';
 import TaskModal from './components/TaskModal';
 import { ContractorCard } from './components/ContractorCard';
 import * as S from './styles/AppStyles';
 
 export function App() {
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [contractors, setContractors] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [isContractorModalOpen, setIsContractorModalOpen] = useState(false);
@@ -78,34 +81,44 @@ export function App() {
   return (
     <>
       <GlobalStyles />
-      <S.Container>
-        <S.Header>
-          <h1><UserCheck size={22} /> Terceirizados & Performance</h1>
-          <S.AddButton onClick={() => { setSelectedContractor(null); setIsContractorModalOpen(true); }}>
-            <Plus size={16} /> Novo Terceirizado
-          </S.AddButton>
-        </S.Header>
+      <Navbar activeTab={activeTab} onChangeTab={setActiveTab} />
 
-        <S.Grid>
-          {contractors.map((item, idx) => (
-            <ContractorCard
-              key={item.id}
-              contractor={item}
-              rank={idx + 1}
-              tasks={tasks.filter(t => t.contractor_id === item.id)}
-              onEdit={(contractor) => {
-                setSelectedContractor(contractor);
-                setIsContractorModalOpen(true);
-              }}
-              onDelete={handleDeleteContractor}
-              onCreateTask={(contractor) => {
-                setSelectedContractor(contractor);
-                setIsTaskModalOpen(true);
-              }}
-              onCompleteTask={handleCompleteTask}
-            />
-          ))}
-        </S.Grid>
+      <S.Container>
+        {activeTab === 'dashboard' && (
+          <Dashboard contractors={contractors} tasks={tasks} />
+        )}
+
+        {activeTab === 'contractors' && (
+          <>
+            <S.Header>
+              <h1><UserCheck size={22} /> Terceirizados & Performance</h1>
+              <S.AddButton onClick={() => { setSelectedContractor(null); setIsContractorModalOpen(true); }}>
+                <Plus size={16} /> Novo Terceirizado
+              </S.AddButton>
+            </S.Header>
+
+            <S.Grid>
+              {contractors.map((item, idx) => (
+                <ContractorCard
+                  key={item.id}
+                  contractor={item}
+                  rank={idx + 1}
+                  tasks={tasks.filter(t => t.contractor_id === item.id)}
+                  onEdit={(contractor) => {
+                    setSelectedContractor(contractor);
+                    setIsContractorModalOpen(true);
+                  }}
+                  onDelete={handleDeleteContractor}
+                  onCreateTask={(contractor) => {
+                    setSelectedContractor(contractor);
+                    setIsTaskModalOpen(true);
+                  }}
+                  onCompleteTask={handleCompleteTask}
+                />
+              ))}
+            </S.Grid>
+          </>
+        )}
 
         <ContractorModal 
           isOpen={isContractorModalOpen}
