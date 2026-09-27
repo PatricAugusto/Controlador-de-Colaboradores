@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { LevelProgressCard } from './LevelProgressCard/LevelProgressCard';
+import { LevelProgressCard } from './index';
 
 describe('LevelProgressCard Component', () => {
   it('deve renderizar o nome do usuário quando fornecido via props', () => {
@@ -15,7 +15,7 @@ describe('LevelProgressCard Component', () => {
 
     expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent('Nível 1 • Iniciante');
     expect(screen.getByText('0 pts acumulados')).toBeInTheDocument();
-    expect(screen.getByText('100 pts')).toBeInTheDocument(); // Faltam 100 para o próximo
+    expect(screen.getByText('100 pts')).toBeInTheDocument();
   });
 
   it('deve identificar corretamente o nível Bronze', () => {
@@ -23,7 +23,7 @@ describe('LevelProgressCard Component', () => {
 
     expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent('Nível 2 • Bronze');
     expect(screen.getByText('200 pts acumulados')).toBeInTheDocument();
-    expect(screen.getByText('100 pts')).toBeInTheDocument(); // 300 - 200 = 100 para Prata
+    expect(screen.getByText('100 pts')).toBeInTheDocument();
   });
 
   it('deve identificar corretamente o nível Prata', () => {
@@ -31,7 +31,7 @@ describe('LevelProgressCard Component', () => {
 
     expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent('Nível 3 • Prata');
     expect(screen.getByText('450 pts acumulados')).toBeInTheDocument();
-    expect(screen.getByText('150 pts')).toBeInTheDocument(); // 600 - 450 = 150 para Ouro
+    expect(screen.getByText('150 pts')).toBeInTheDocument();
   });
 
   it('deve identificar corretamente o nível Ouro', () => {

@@ -102,7 +102,7 @@ export const ProgressTrack = styled.div`
 export const ProgressBar = styled.div<ProgressBarProps>`
   height: 100%;
   border-radius: 9999px;
-  width: ${(props) => props.$progress}%;
+  width: ${(props) => Math.min(Math.max(props.$progress, 0), 100)}%;
   background-color: ${(props) => props.$color};
   box-shadow: 0 0 12px ${(props) => props.$color};
   transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);

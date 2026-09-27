@@ -2,8 +2,8 @@ import { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { GlobalStyles } from './styles/GlobalStyles';
-import ContractorModal from "./components/ContractorModal";
-import { TaskModal } from './components/TaskModal';
+import ContractorModal from './components/ContractorModal';
+import TaskModal from './components/TaskModal';
 import { Trophy, Plus, UserCheck, Pencil, Trash2, CheckCircle2, ListTodo } from 'lucide-react';
 
 const API_URL = 'http://localhost:3333';
