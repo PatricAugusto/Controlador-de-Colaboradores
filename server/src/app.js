@@ -71,4 +71,23 @@ app.patch('/tasks/:id/complete', async (req, res) => {
   }
 });
 
+// Listar tarefas de um terceirizado específico ou todas as pendentes
+app.get('/tasks', async (req, res) => {
+  const { contractor_id } = req.query;
+  try {
+    let query = 'SELECT * FROM tasks WHERE status = $1 ORDER BY created_at DESC';
+    let params = ['PENDING'];
+
+    if (contractor_id) {
+      query = 'SELECT * FROM tasks WHERE contractor_id = $1 ORDER BY created_at DESC';
+      params = [contractor_id];
+    }
+
+    const result = await pool.query(query, params);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default app;
