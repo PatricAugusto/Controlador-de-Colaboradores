@@ -8,8 +8,9 @@ const Overlay = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -17,37 +18,42 @@ const Overlay = styled.div`
 `;
 
 const ModalCard = styled.div`
-  background: #1e293b;
-  border: 1px solid #334155;
-  border-radius: 12px;
+  background: rgba(18, 18, 20, 0.85);
+  border: 1px solid var(--glass-border-focus);
+  border-radius: 18px;
   width: 100%;
   max-width: 480px;
-  padding: 1.5rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  padding: 2rem;
+  box-shadow: var(--shadow-deep), 0 0 40px rgba(255, 255, 255, 0.03);
 `;
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
 
   h2 {
     font-size: 1.25rem;
-    color: #f8fafc;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #ffffff;
   }
 
   button {
     background: transparent;
-    color: #94a3b8;
-    &:hover { color: #f8fafc; }
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 0.2s;
+    &:hover { color: #ffffff; }
   }
 `;
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
 `;
 
 const FormGroup = styled.div`
@@ -56,21 +62,25 @@ const FormGroup = styled.div`
   gap: 0.5rem;
 
   label {
-    font-size: 0.875rem;
-    color: #cbd5e1;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
   }
 
   input {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 6px;
-    padding: 0.75rem;
-    color: #f8fafc;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    color: #ffffff;
     font-size: 0.95rem;
     outline: none;
+    transition: all 0.2s ease;
 
     &:focus {
-      border-color: #38bdf8;
+      border-color: #ffffff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
     }
   }
 `;
@@ -83,23 +93,26 @@ const ButtonGroup = styled.div`
 `;
 
 const Button = styled.button`
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
+  padding: 0.7rem 1.4rem;
+  border-radius: 8px;
   font-weight: 500;
-  font-size: 0.9rem;
-  transition: all 0.2s;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 
   &.cancel {
     background: transparent;
-    color: #94a3b8;
-    border: 1px solid #334155;
-    &:hover { background: #334155; color: #fff; }
+    color: var(--text-secondary);
+    border: 1px solid var(--glass-border);
+    &:hover { background: rgba(255, 255, 255, 0.05); color: #ffffff; }
   }
 
   &.save {
-    background: #0284c7;
-    color: #fff;
-    &:hover { background: #0369a1; }
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    font-weight: 600;
+    &:hover { background: #e2e8f0; }
   }
 `;
 

@@ -9,155 +9,207 @@ import { Trophy, Plus, UserCheck, Pencil, Trash2, CheckCircle2, ListTodo } from 
 const API_URL = 'http://localhost:3333';
 
 const Container = styled.div`
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 3rem 1.5rem;
 `;
 
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  border-bottom: 1px solid #1e293b;
-  padding-bottom: 1rem;
+  margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--glass-border);
 
   h1 {
-    font-size: 1.8rem;
-    color: #38bdf8;
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: #ffffff;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
 `;
 
 const AddButton = styled.button`
-  background: #0284c7;
-  color: #ffffff;
+  background: #ffffff;
+  color: #000000;
+  border: none;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
+  padding: 0.7rem 1.4rem;
+  border-radius: 10px;
   font-weight: 600;
-  transition: background 0.2s;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
 
-  &:hover { background: #0369a1; }
+  &:hover {
+    background: #e2e8f0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(255, 255, 255, 0.25);
+  }
 `;
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
 `;
 
 const Card = styled.div`
-  background: #1e293b;
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid #334155;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-radius: 16px;
+  padding: 1.75rem;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-deep);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: var(--glass-border-focus);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-glow), var(--shadow-deep);
+  }
 `;
 
 const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 `;
 
 const Badge = styled.span`
-  background: #0284c7;
-  color: #fff;
-  font-weight: bold;
-  padding: 0.25rem 0.75rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--glass-border);
+  color: #f8fafc;
+  font-weight: 500;
+  padding: 0.3rem 0.8rem;
   border-radius: 999px;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 `;
 
 const Actions = styled.div`
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
 
   button {
     background: transparent;
-    color: #94a3b8;
-    padding: 0.2rem;
-    transition: color 0.2s;
+    border: none;
+    color: var(--text-secondary);
+    padding: 0.4rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
 
-    &.edit:hover { color: #38bdf8; }
-    &.delete:hover { color: #f43f5e; }
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+
+    &.delete:hover {
+      color: #ef4444;
+    }
   }
 `;
 
 const PointsTag = styled.div`
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  color: #f59e0b;
-  font-weight: bold;
-  font-size: 1.1rem;
+  gap: 0.5rem;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-top: 1rem;
+  letter-spacing: -0.02em;
 `;
 
 const TaskSection = styled.div`
-  margin-top: 1.2rem;
-  border-top: 1px dashed #334155;
-  padding-top: 1rem;
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--glass-border);
+  padding-top: 1.25rem;
 `;
 
 const TaskHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 
   h4 {
-    font-size: 0.875rem;
-    color: #94a3b8;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-secondary);
     display: flex;
     align-items: center;
-    gap: 0.3rem;
+    gap: 0.4rem;
   }
 `;
 
 const TaskItem = styled.div`
-  background: #0f172a;
-  border: 1px solid #1e293b;
-  border-radius: 6px;
-  padding: 0.6rem;
-  margin-bottom: 0.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.6rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+  }
 
   .task-info {
-    font-size: 0.85rem;
-    p { font-weight: 500; color: #f1f5f9; }
-    span { color: #f59e0b; font-size: 0.75rem; font-weight: bold; }
+    p { font-size: 0.875rem; font-weight: 500; color: #f8fafc; }
+    span { color: var(--text-secondary); font-size: 0.75rem; }
   }
 
   button {
-    background: #10b981;
-    color: #fff;
-    border-radius: 4px;
-    padding: 0.3rem 0.6rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    padding: 0.4rem 0.7rem;
     font-size: 0.75rem;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.2rem;
-    &:hover { background: #059669; }
+    gap: 0.3rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #ffffff;
+      color: #000000;
+    }
   }
 `;
 
 const SmallAddBtn = styled.button`
   background: transparent;
-  color: #38bdf8;
+  border: none;
+  color: var(--text-primary);
   font-size: 0.8rem;
+  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.2rem;
-  &:hover { text-decoration: underline; }
+  opacity: 0.7;
+  transition: opacity 0.2s;
+
+  &:hover { opacity: 1; }
 `;
 
 export function App() {
@@ -233,9 +285,9 @@ export function App() {
       <GlobalStyles />
       <Container>
         <Header>
-          <h1><UserCheck /> Painel de Terceirizados & Gamificação</h1>
+          <h1><UserCheck size={22} /> Terceirizados & Performance</h1>
           <AddButton onClick={() => { setSelectedContractor(null); setIsContractorModalOpen(true); }}>
-            <Plus size={18} /> Novo Terceirizado
+            <Plus size={16} /> Novo Terceirizado
           </AddButton>
         </Header>
 
@@ -247,36 +299,34 @@ export function App() {
               <Card key={item.id}>
                 <div>
                   <CardHeader>
-                    <Badge>#{idx + 1} Ranking</Badge>
+                    <Badge>RANK #{idx + 1}</Badge>
                     <Actions>
                       <button className="edit" onClick={() => { setSelectedContractor(item); setIsContractorModalOpen(true); }} title="Editar">
-                        <Pencil size={16} />
+                        <Pencil size={15} />
                       </button>
                       <button className="delete" onClick={() => handleDeleteContractor(item.id)} title="Excluir">
-                        <Trash2 size={16} />
+                        <Trash2 size={15} />
                       </button>
                     </Actions>
                   </CardHeader>
-                  <h3 style={{ marginTop: '0.75rem' }}>{item.name}</h3>
-                  <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>{item.role}</p>
+                  <h3 style={{ marginTop: '1rem', fontSize: '1.2rem', fontWeight: 600 }}>{item.name}</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.2rem' }}>{item.role}</p>
 
-                  <div style={{ marginTop: '1rem' }}>
-                    <PointsTag>
-                      <Trophy size={18} />
-                      {item.points} PTS
-                    </PointsTag>
-                  </div>
+                  <PointsTag>
+                    <Trophy size={18} />
+                    {item.points} <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 400 }}>PTS</span>
+                  </PointsTag>
 
                   <TaskSection>
                     <TaskHeader>
-                      <h4><ListTodo size={14} /> Tarefas Pendentes</h4>
+                      <h4><ListTodo size={13} /> Pendentes</h4>
                       <SmallAddBtn onClick={() => { setSelectedContractor(item); setIsTaskModalOpen(true); }}>
-                        <Plus size={14} /> Tarefa
+                        <Plus size={13} /> Criar
                       </SmallAddBtn>
                     </TaskHeader>
 
                     {contractorTasks.length === 0 ? (
-                      <p style={{ color: '#64748b', fontSize: '0.8rem' }}>Nenhuma tarefa pendente.</p>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '0.8rem', fontStyle: 'italic' }}>Nenhuma tarefa pendente.</p>
                     ) : (
                       contractorTasks.map((t) => (
                         <TaskItem key={t.id}>
@@ -285,7 +335,7 @@ export function App() {
                             <span>+{t.points_reward} PTS</span>
                           </div>
                           <button onClick={() => handleCompleteTask(t.id)}>
-                            <CheckCircle2 size={14} /> Concluir
+                            <CheckCircle2 size={13} /> Concluir
                           </button>
                         </TaskItem>
                       ))
