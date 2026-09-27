@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { GlobalStyles } from './styles/GlobalStyles';
-import { ContractorModal } from './components/ContractorModal';
+import ContractorModal from "./components/ContractorModal";
 import { TaskModal } from './components/TaskModal';
 import { Trophy, Plus, UserCheck, Pencil, Trash2, CheckCircle2, ListTodo } from 'lucide-react';
 
-const API_URL = 'http://localhost:3001';
+const API_URL = 'http://localhost:3333';
 
 const Container = styled.div`
   max-width: 1100px;
@@ -167,11 +167,7 @@ export function App() {
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [selectedContractor, setSelectedContractor] = useState(null);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const [contractorsRes, tasksRes] = await Promise.all([
         axios.get(`${API_URL}/contractors`),
@@ -182,7 +178,11 @@ export function App() {
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleSaveContractor = async (formData) => {
     try {

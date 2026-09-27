@@ -6,6 +6,7 @@ import { pool } from './database/index.js';
 dotenv.config();
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
@@ -29,6 +30,30 @@ app.post('/contractors', async (req, res) => {
     res.status(201).json(result.rows[0]);
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+});
+
+app.put('/contractors/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, email, role } = req.body;
+  try {
+    const result = await pool.query(
+      'UPDATE contractors SET name = $1, email = $2, role = $3 WHERE id = $4 RETURNING *',
+      [name, email, role, id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+app.delete('/contractors/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await pool.query('DELETE FROM contractors WHERE id = $1', [id]);
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
@@ -71,7 +96,6 @@ app.patch('/tasks/:id/complete', async (req, res) => {
   }
 });
 
-// Listar tarefas de um terceirizado específico ou todas as pendentes
 app.get('/tasks', async (req, res) => {
   const { contractor_id } = req.query;
   try {

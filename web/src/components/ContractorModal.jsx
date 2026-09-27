@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { X } from 'lucide-react';
 
@@ -109,6 +109,8 @@ export function ContractorModal({ isOpen, onClose, onSave, contractorToEdit }) {
   const [role, setRole] = useState('');
 
   useEffect(() => {
+    if (!isOpen) return;
+
     if (contractorToEdit) {
       setName(contractorToEdit.name || '');
       setEmail(contractorToEdit.email || '');
@@ -178,3 +180,5 @@ export function ContractorModal({ isOpen, onClose, onSave, contractorToEdit }) {
     </Overlay>
   );
 }
+
+export default ContractorModal;

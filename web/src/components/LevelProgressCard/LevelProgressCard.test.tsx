@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { LevelProgressCard } from './LevelProgressCard';
+import { LevelProgressCard } from './LevelProgressCard/LevelProgressCard';
 
 describe('LevelProgressCard Component', () => {
   it('deve renderizar o nome do usuário quando fornecido via props', () => {
