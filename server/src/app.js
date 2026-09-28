@@ -58,6 +58,24 @@ app.delete('/contractors/:id', async (req, res) => {
 });
 
 // --- ROTAS DE TAREFAS & GAMIFICAÇÃO ---
+app.get('/tasks', async (req, res) => {
+  const { contractor_id } = req.query;
+  try {
+    let query = 'SELECT * FROM tasks ORDER BY created_at DESC';
+    let params = [];
+
+    if (contractor_id) {
+      query = 'SELECT * FROM tasks WHERE contractor_id = $1 ORDER BY created_at DESC';
+      params = [contractor_id];
+    }
+
+    const result = await pool.query(query, params);
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.post('/tasks', async (req, res) => {
   const { title, description, points_reward, contractor_id } = req.body;
   try {
@@ -71,6 +89,28 @@ app.post('/tasks', async (req, res) => {
   }
 });
 
+// Atualização Genérica de Status (PENDING, IN_PROGRESS, etc.)
+app.patch('/tasks/:id', async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  try {
+    const result = await pool.query(
+      'UPDATE tasks SET status = $1 WHERE id = $2 RETURNING *',
+      [status, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Tarefa não encontrada' });
+    }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Conclusão com Recompensa Automática de Pontos
 app.patch('/tasks/:id/complete', async (req, res) => {
   const { id } = req.params;
   try {
@@ -91,24 +131,6 @@ app.patch('/tasks/:id/complete', async (req, res) => {
       message: 'Tarefa concluída e pontos creditados!',
       contractor: contractorResult.rows[0]
     });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-app.get('/tasks', async (req, res) => {
-  const { contractor_id } = req.query;
-  try {
-    let query = 'SELECT * FROM tasks WHERE status = $1 ORDER BY created_at DESC';
-    let params = ['PENDING'];
-
-    if (contractor_id) {
-      query = 'SELECT * FROM tasks WHERE contractor_id = $1 ORDER BY created_at DESC';
-      params = [contractor_id];
-    }
-
-    const result = await pool.query(query, params);
-    res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

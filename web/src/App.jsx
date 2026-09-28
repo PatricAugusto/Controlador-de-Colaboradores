@@ -80,6 +80,13 @@ export function App() {
   };
 
   const handleUpdateTaskStatus = async (taskId, newStatus) => {
+    const previousTasks = [...tasks];
+
+    // Atualização otimista no estado local
+    setTasks((prev) =>
+      prev.map((t) => (t.id === taskId ? { ...t, status: newStatus } : t))
+    );
+
     try {
       if (newStatus === 'COMPLETED') {
         await api.patch(`/tasks/${taskId}/complete`);
@@ -89,6 +96,7 @@ export function App() {
       fetchData();
     } catch (error) {
       console.error('Erro ao atualizar status da tarefa:', error);
+      setTasks(previousTasks); // Reverte caso a API falhe
     }
   };
 
