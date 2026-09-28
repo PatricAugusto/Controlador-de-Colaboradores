@@ -110,6 +110,59 @@ app.patch('/tasks/:id', async (req, res) => {
   }
 });
 
+// --- ROTAS DA LOJA DE RECOMPENSAS ---
+
+// Listar produtos da loja
+app.get('/rewards', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM rewards ORDER BY points_cost ASC');
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Resgatar uma recompensa
+app.post('/rewards/redeem', async (req, res) => {
+  const { contractor_id, reward_id } = req.body;
+
+  try {
+    const [contractorRes, rewardRes] = await Promise.all([
+      pool.query('SELECT * FROM contractors WHERE id = $1', [contractor_id]),
+      pool.query('SELECT * FROM rewards WHERE id = $1', [reward_id])
+    ]);
+
+    const contractor = contractorRes.rows[0];
+    const reward = rewardRes.rows[0];
+
+    if (!contractor) return res.status(404).json({ error: 'Colaborador não encontrado' });
+    if (!reward) return res.status(404).json({ error: 'Recompensa não encontrada' });
+
+    if (contractor.points < reward.points_cost) {
+      return res.status(400).json({ error: 'Saldo de pontos insuficiente para este resgate' });
+    }
+
+    // 1. Deducao dos pontos do colaborador
+    const updatedContractor = await pool.query(
+      'UPDATE contractors SET points = points - $1 WHERE id = $2 RETURNING *',
+      [reward.points_cost, contractor_id]
+    );
+
+    // 2. Registro do histórico de resgate
+    await pool.query(
+      'INSERT INTO redemptions (contractor_id, reward_id, points_spent) VALUES ($1, $2, $3)',
+      [contractor_id, reward_id, reward.points_cost]
+    );
+
+    res.json({
+      message: 'Resgate efetuado com sucesso!',
+      contractor: updatedContractor.rows[0]
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Conclusão com Recompensa Automática de Pontos
 app.patch('/tasks/:id/complete', async (req, res) => {
   const { id } = req.params;

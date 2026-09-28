@@ -5,6 +5,7 @@ import { GlobalStyles } from './styles/GlobalStyles';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import Kanban from './components/Kanban';
+import RewardsStore from './components/RewardsStore';
 import ContractorModal from './components/ContractorModal';
 import TaskModal from './components/TaskModal';
 import { ContractorCard } from './components/ContractorCard';
@@ -14,18 +15,21 @@ export function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [contractors, setContractors] = useState([]);
   const [tasks, setTasks] = useState([]);
+  const [rewards, setRewards] = useState([]);
   const [isContractorModalOpen, setIsContractorModalOpen] = useState(false);
   const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
   const [selectedContractor, setSelectedContractor] = useState(null);
 
   const fetchData = useCallback(async () => {
     try {
-      const [contractorsRes, tasksRes] = await Promise.all([
+      const [contractorsRes, tasksRes, rewardsRes] = await Promise.all([
         api.get('/contractors'),
-        api.get('/tasks')
+        api.get('/tasks'),
+        api.get('/rewards')
       ]);
       setContractors(contractorsRes.data);
       setTasks(tasksRes.data);
+      setRewards(rewardsRes.data);
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
     }
@@ -100,6 +104,20 @@ export function App() {
     }
   };
 
+  const handleRedeemReward = async (contractorId, rewardId) => {
+    try {
+      await api.post('/rewards/redeem', {
+        contractor_id: contractorId,
+        reward_id: rewardId
+      });
+      alert('Resgate realizado com sucesso!');
+      fetchData(); // Atualiza o saldo de pontos e o ranking em tempo real
+    } catch (error) {
+      console.error('Erro ao realizar resgate:', error);
+      alert(error.response?.data?.error || 'Não foi possível efetuar o resgate.');
+    }
+  };
+
   return (
     <>
       <GlobalStyles />
@@ -115,6 +133,14 @@ export function App() {
             tasks={tasks}
             contractors={contractors}
             onUpdateTaskStatus={handleUpdateTaskStatus}
+          />
+        )}
+
+        {activeTab === 'rewards' && (
+          <RewardsStore
+            contractors={contractors}
+            rewards={rewards}
+            onRedeemReward={handleRedeemReward}
           />
         )}
 
