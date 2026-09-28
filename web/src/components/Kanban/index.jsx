@@ -1,4 +1,5 @@
-import { Circle, Clock, CheckCircle2, User, ArrowRight, ArrowLeft } from 'lucide-react';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { Circle, Clock, CheckCircle2, User, GripVertical } from 'lucide-react';
 import * as S from './styles';
 
 export function Kanban({ tasks = [], contractors = [], onUpdateTaskStatus }) {
@@ -13,74 +14,94 @@ export function Kanban({ tasks = [], contractors = [], onUpdateTaskStatus }) {
     return contractor ? contractor.name : 'Não atribuído';
   };
 
+  const handleDragEnd = (result) => {
+    const { destination, source, draggableId } = result;
+
+    // Se soltar fora de uma coluna válida ou na mesma posição, ignora
+    if (!destination) return;
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    const taskId = Number(draggableId) || draggableId;
+    const newStatus = destination.droppableId;
+
+    // Dispara a atualização de status (se for 'COMPLETED', aciona a bonificação)
+    onUpdateTaskStatus(taskId, newStatus);
+  };
+
   return (
     <S.Container>
       <S.Header>
         <h2>Quadro Kanban de Entregas</h2>
       </S.Header>
 
-      <S.BoardGrid>
-        {columns.map((col) => {
-          const Icon = col.icon;
-          const columnTasks = tasks.filter((t) => t.status === col.id);
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <S.BoardGrid>
+          {columns.map((col) => {
+            const Icon = col.icon;
+            const columnTasks = tasks.filter((t) => t.status === col.id);
 
-          return (
-            <S.Column key={col.id}>
-              <S.ColumnHeader>
-                <div className="title-group">
-                  <Icon size={18} color={col.color} />
-                  <span>{col.label}</span>
-                </div>
-                <span className="count">{columnTasks.length}</span>
-              </S.ColumnHeader>
+            return (
+              <S.Column key={col.id}>
+                <S.ColumnHeader>
+                  <div className="title-group">
+                    <Icon size={18} color={col.color} />
+                    <span>{col.label}</span>
+                  </div>
+                  <span className="count">{columnTasks.length}</span>
+                </S.ColumnHeader>
 
-              <S.TaskList>
-                {columnTasks.length === 0 ? (
-                  <p style={{ color: '#52525b', fontSize: '0.8rem', fontStyle: 'italic', textAlign: 'center', marginTop: '2rem' }}>
-                    Sem tarefas nesta coluna
-                  </p>
-                ) : (
-                  columnTasks.map((task) => (
-                    <S.TaskCard key={task.id}>
-                      <div className="card-top">
-                        <h4>{task.title}</h4>
-                      </div>
+                <Droppable droppableId={col.id}>
+                  {(provided, snapshot) => (
+                    <S.TaskList
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                      $isDraggingOver={snapshot.isDraggingOver}
+                    >
+                      {columnTasks.map((task, index) => (
+                        <Draggable
+                          key={String(task.id)}
+                          draggableId={String(task.id)}
+                          index={index}
+                        >
+                          {(provided, snapshot) => (
+                            <S.TaskCard
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              $isDragging={snapshot.isDragging}
+                            >
+                              <div className="card-top">
+                                <h4>{task.title}</h4>
+                                <GripVertical size={14} className="drag-handle" />
+                              </div>
 
-                      {task.description && <p>{task.description}</p>}
+                              {task.description && <p>{task.description}</p>}
 
-                      <div className="card-footer">
-                        <div className="assignee">
-                          <User size={13} />
-                          {getContractorName(task.contractor_id)}
-                        </div>
-                        <span className="reward">+{task.points_reward} PTS</span>
-                      </div>
-
-                      <S.ActionGroup>
-                        {col.id === 'IN_PROGRESS' && (
-                          <button onClick={() => onUpdateTaskStatus(task.id, 'PENDING')}>
-                            <ArrowLeft size={12} /> Recuar
-                          </button>
-                        )}
-                        {col.id === 'PENDING' && (
-                          <button onClick={() => onUpdateTaskStatus(task.id, 'IN_PROGRESS')}>
-                            Iniciar <ArrowRight size={12} />
-                          </button>
-                        )}
-                        {col.id !== 'COMPLETED' && (
-                          <button onClick={() => onUpdateTaskStatus(task.id, 'COMPLETED')}>
-                            <CheckCircle2 size={12} /> Concluir
-                          </button>
-                        )}
-                      </S.ActionGroup>
-                    </S.TaskCard>
-                  ))
-                )}
-              </S.TaskList>
-            </S.Column>
-          );
-        })}
-      </S.BoardGrid>
+                              <div className="card-footer">
+                                <div className="assignee">
+                                  <User size={13} />
+                                  {getContractorName(task.contractor_id)}
+                                </div>
+                                <span className="reward">+{task.points_reward} PTS</span>
+                              </div>
+                            </S.TaskCard>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </S.TaskList>
+                  )}
+                </Droppable>
+              </S.Column>
+            );
+          })}
+        </S.BoardGrid>
+      </DragDropContext>
     </S.Container>
   );
 }

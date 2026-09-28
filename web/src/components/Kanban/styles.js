@@ -37,7 +37,7 @@ export const Column = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  min-height: 500px;
+  min-height: 520px;
 `;
 
 export const ColumnHeader = styled.div`
@@ -71,34 +71,46 @@ export const TaskList = styled.div`
   flex-direction: column;
   gap: 0.85rem;
   flex: 1;
+  border-radius: 10px;
+  padding: 0.25rem;
+  background: ${(props) =>
+    props.$isDraggingOver ? 'rgba(255, 255, 255, 0.02)' : 'transparent'};
+  transition: background-color 0.2s ease;
 `;
 
 export const TaskCard = styled.div`
-  background: rgba(26, 26, 30, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(26, 26, 30, 0.9);
+  border: 1px solid
+    ${(props) => (props.$isDragging ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.06)')};
   border-radius: 12px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  transition: all 0.2s ease;
+  cursor: grab;
+  user-select: none;
+  box-shadow: ${(props) =>
+    props.$isDragging ? '0 10px 30px rgba(0, 0, 0, 0.5)' : 'none'};
+  transition: border-color 0.2s ease, transform 0.2s ease;
 
-  &:hover {
-    border-color: rgba(255, 255, 255, 0.15);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  &:active {
+    cursor: grabbing;
   }
 
   .card-top {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
 
     h4 {
       font-size: 0.9rem;
       font-weight: 600;
       color: #ffffff;
       margin: 0;
+    }
+
+    .drag-handle {
+      color: #52525b;
     }
   }
 
@@ -131,31 +143,6 @@ export const TaskCard = styled.div`
       background: rgba(245, 158, 11, 0.1);
       padding: 0.2rem 0.5rem;
       border-radius: 6px;
-    }
-  }
-`;
-
-export const ActionGroup = styled.div`
-  display: flex;
-  gap: 0.4rem;
-  margin-top: 0.25rem;
-
-  button {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #a1a1aa;
-    padding: 0.35rem 0.6rem;
-    border-radius: 6px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: #ffffff;
-      color: #000000;
     }
   }
 `;
