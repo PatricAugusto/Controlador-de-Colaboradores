@@ -1,13 +1,13 @@
-import { LayoutDashboard, Users, ShieldCheck, Kanban as KanbanIcon, Gift } from 'lucide-react';
+import { LayoutDashboard, Users, Kanban as KanbanIcon, Gift, BarChart3 } from 'lucide-react';
 import * as S from './styles';
 
-export function Navbar({ activeTab, onChangeTab }) {
-  const tabs = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'kanban', label: 'Kanban', icon: KanbanIcon },
-    { id: 'rewards', label: 'Loja de Recompensas', icon: Gift },
-    { id: 'contractors', label: 'Terceirizados', icon: Users },
-  ];
+const tabs = [
+  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'kanban', label: 'Kanban', icon: KanbanIcon },
+  { id: 'rewards', label: 'Loja de Recompensas', icon: Gift },
+  { id: 'reports', label: 'Relatórios', icon: BarChart3 },
+  { id: 'contractors', label: 'Terceirizados', icon: Users },
+];
 
   return (
     <S.Container>
@@ -39,6 +39,5 @@ export function Navbar({ activeTab, onChangeTab }) {
       </S.Content>
     </S.Container>
   );
-}
 
 export default Navbar;

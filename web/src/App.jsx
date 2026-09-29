@@ -6,6 +6,7 @@ import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import Kanban from './components/Kanban';
 import RewardsStore from './components/RewardsStore';
+import Reports from './components/Reports';
 import ContractorModal from './components/ContractorModal';
 import TaskModal from './components/TaskModal';
 import { ContractorCard } from './components/ContractorCard';
@@ -111,7 +112,7 @@ export function App() {
         reward_id: rewardId
       });
       alert('Resgate realizado com sucesso!');
-      fetchData(); // Atualiza o saldo de pontos e o ranking em tempo real
+      fetchData();
     } catch (error) {
       console.error('Erro ao realizar resgate:', error);
       alert(error.response?.data?.error || 'Não foi possível efetuar o resgate.');
@@ -142,6 +143,10 @@ export function App() {
             rewards={rewards}
             onRedeemReward={handleRedeemReward}
           />
+        )}
+
+        {activeTab === 'reports' && (
+          <Reports contractors={contractors} tasks={tasks} />
         )}
 
         {activeTab === 'contractors' && (
