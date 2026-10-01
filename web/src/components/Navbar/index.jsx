@@ -1,4 +1,4 @@
-import { LayoutDashboard, Users, Kanban as KanbanIcon, Gift, BarChart3 } from 'lucide-react';
+import { LayoutDashboard, Users, Kanban as KanbanIcon, Gift, BarChart3, ShieldCheck } from 'lucide-react';
 import * as S from './styles';
 
 const tabs = [
@@ -9,6 +9,7 @@ const tabs = [
   { id: 'contractors', label: 'Terceirizados', icon: Users },
 ];
 
+export function Navbar({ activeTab, onChangeTab }) {
   return (
     <S.Container>
       <S.Content>
@@ -39,5 +40,6 @@ const tabs = [
       </S.Content>
     </S.Container>
   );
+}
 
 export default Navbar;
