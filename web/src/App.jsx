@@ -7,6 +7,7 @@ import Dashboard from './components/Dashboard';
 import Kanban from './components/Kanban';
 import RewardsStore from './components/RewardsStore';
 import Reports from './components/Reports';
+import Gamification from './components/Gamification';
 import ContractorModal from './components/ContractorModal';
 import TaskModal from './components/TaskModal';
 import { ContractorCard } from './components/ContractorCard';
@@ -135,6 +136,10 @@ export function App() {
             contractors={contractors}
             onUpdateTaskStatus={handleUpdateTaskStatus}
           />
+        )}
+
+        {activeTab === 'gamification' && (
+          <Gamification contractors={contractors} />
         )}
 
         {activeTab === 'rewards' && (

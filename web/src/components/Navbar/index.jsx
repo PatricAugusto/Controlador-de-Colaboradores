@@ -1,9 +1,10 @@
-import { LayoutDashboard, Users, Kanban as KanbanIcon, Gift, BarChart3, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, Users, Kanban as KanbanIcon, Gift, BarChart3, ShieldCheck, Trophy } from 'lucide-react';
 import * as S from './styles';
 
 const tabs = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'kanban', label: 'Kanban', icon: KanbanIcon },
+  { id: 'gamification', label: 'Gamificação', icon: Trophy },
   { id: 'rewards', label: 'Loja de Recompensas', icon: Gift },
   { id: 'reports', label: 'Relatórios', icon: BarChart3 },
   { id: 'contractors', label: 'Terceirizados', icon: Users },
