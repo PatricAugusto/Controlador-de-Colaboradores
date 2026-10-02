@@ -29,6 +29,17 @@ export function AuthProvider({ children }) {
     setUser(userData);
   };
 
+  const register = async (userData) => {
+    const response = await api.post('/register', userData);
+    const { token, user: newUser } = response.data;
+
+    localStorage.setItem('@Controlador:token', token);
+    localStorage.setItem('@Controlador:user', JSON.stringify(newUser));
+
+    api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    setUser(newUser);
+  };
+
   const logout = () => {
     localStorage.removeItem('@Controlador:token');
     localStorage.removeItem('@Controlador:user');
@@ -38,7 +49,17 @@ export function AuthProvider({ children }) {
   const isAdmin = user?.role === 'ADMIN';
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAdmin, isAuthenticated: !!user, loading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        register,
+        logout,
+        isAdmin,
+        isAuthenticated: !!user,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

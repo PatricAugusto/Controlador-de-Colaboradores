@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { ShieldCheck, Mail, Lock, LogIn } from 'lucide-react';
+import { ShieldCheck, Mail, Lock, LogIn, UserPlus } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import * as S from './styles';
 
-export function Login() {
+export function Login({ onSwitchToRegister }) {
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -70,6 +70,16 @@ export function Login() {
             <LogIn size={18} />
             {loading ? 'Acessando...' : 'Entrar na Conta'}
           </S.SubmitButton>
+
+          {onSwitchToRegister && (
+            <S.SubmitButton
+              type="button"
+              onClick={onSwitchToRegister}
+              style={{ background: 'transparent', color: '#a1a1aa', border: '1px solid rgba(255,255,255,0.1)' }}
+            >
+              <UserPlus size={16} /> Criar uma nova conta
+            </S.SubmitButton>
+          )}
         </S.Form>
       </S.LoginBox>
     </S.Container>
